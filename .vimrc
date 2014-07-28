@@ -25,6 +25,10 @@ set showmatch
 nnoremap . :
 " put vim in paste mode using F2
 set pastetoggle=<F2>
+" Quick toggle spell check
+map <F3>i :set spell! spelllang=it<CR>
+map <F3>e :set spell! spelllang=en<CR>
+map <F4> :set spell!<CR>
 
 " syntastic
 let g:syntastic_check_on_open=0
