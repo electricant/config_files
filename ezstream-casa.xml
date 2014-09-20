@@ -1,0 +1,8 @@
+<ezstream>
+	<url>http://192.168.1.2:8000/radio</url>
+	<sourcepassword></sourcepassword>
+	<format>MP3</format>
+	<filename>/tmp/ezstream.m3u</filename>
+	<stream_once>1</stream_once>
+	<metadata_format>@s@</metadata_format>
+</ezstream>
