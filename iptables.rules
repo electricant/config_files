@@ -2,17 +2,14 @@
 # Iptables rules to protect this server
 #
 
-# All this rates are in number of new connections per minute
-SSH_RATE=5
-TRANSMISSION_RATE=5
-HTTP_RATE=50
-
 # SSH 
 iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW -m recent --set --name SSH
-iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 60 --hitcount 5 --name SSH -j DROP
+iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 10 --hitcount 2 --name SSH -j DROP
+
 # Transmission web interface
 iptables -A INPUT -i eth0 -p tcp --dport 9091 -m state --state NEW -m recent --set --name TRANSMISSION
-iptables -A INPUT -i eth0 -p tcp --dport 9091 -m state --state NEW -m recent --update --seconds 60 --hitcount 5 --name TRANSMISSION -j DROP
+iptables -A INPUT -i eth0 -p tcp --dport 9091 -m state --state NEW -m recent --update --seconds 15 --hitcount 5 --name TRANSMISSION -j DROP
+
 # HTTP
 iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW -m recent --set --name HTTP
-iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 60 --hitcount 50 --name HTTP -j DROP
+iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW -m recent --update --seconds 30 --hitcount 60 --name HTTP -j DROP
