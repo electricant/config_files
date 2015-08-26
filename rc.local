@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+
+# IPTables settings
+sh /etc/iptables.rules
+
+# HD settings
+hdparm -a1024 -M254 -S180 /dev/sda
+hdparm -a1024 -M254 -S180 /dev/sdc
+hdparm -J 300 --please-destroy-my-drive /dev/sdc
+hdparm -a1024 -M254 -S12 /dev/sdb
+echo deadline > /sys/block/sdb/queue/scheduler
+
+# /var/log is mounted on a tmpfs so we need to fix some directories
+# fix /var/log folders for exim4
+mkdir -p /var/log/exim4
+chmod 740 /var/log/exim4
+chown Debian-exim:adm /var/log/exim4
+touch /var/log/exim4/
+chown Debian-exim:adm /var/log/exim4/mainlog
+
+# fix /var/log folders for tor
+mkdir -p /var/log/tor
+chmod 740 /var/log/tor
+chown debian-tor:adm /var/log/tor
+touch /var/log/tor/log
+chown debian-tor:adm /var/log/tor/log
+
+# fix /var/log folders for samba
+mkdir -p /var/log/samba
+chmod 740 /var/log/samba
+
+# fix /var/log folders for lighttpd
+mkdir -p /var/log/lighttpd
+touch /var/log/lighttpd/error.log
+chown -R www-data:www-data /var/log/lighttpd
+chmod -R 740 /var/log/lighttpd
+
+# fix /var/log folders for icecast2
+mkdir -p /var/log/icecast2
+touch /var/log/icecast2/error.log
+touch /var/log/icecast2/access.log
+chown -R icecast2:icecast /var/log/icecast2
+chmod -R 740 /var/log/icecast2
+
+# fix /var/log for postgres
+mkdir -p /var/log/postgresql
+touch /var/log/postgresql/postgresql-9.4-main.log
+chown -R postgres:postgres /var/log/postgresql
+chmod -R 740 /var/log/postgresql
+
+# fix /tmp folders for tt-rss
+mkdir /tmp/tt-rss
+mkdir /tmp/tt-rss/images
+mkdir /tmp/tt-rss/upload
+mkdir /tmp/tt-rss/export
+mkdir /tmp/tt-rss/js
+chmod -R 1755 /tmp/tt-rss
+chown -R www-data:www-data /tmp/tt-rss
+
+exit 0
