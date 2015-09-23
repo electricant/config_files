@@ -1,0 +1,61 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# See also '/etc/bash.bashrc' for global aliases and configuration
+#
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+
+# save all lines of a multiple-line command in the same history entry. This
+# allows easy re-editing of multi-line commands. 
+shopt -s cmdhist
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# set history length
+HISTSIZE=1000
+HISTFILESIZE=1000
+
+# check the window size after each command and, if necessary, update the values
+# of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# correct spelling mistakes on directory names during word completion if the
+# directory name initially supplied does not exist
+shopt -s dirspell
+
+# enable color support for some commands
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    #alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Alias and additional commands definitions.
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Restore ccache settings
+export CCACHE_TEMPDIR="/tmp"
+export CCACHE_DIR="/var/cache/ccache"
+
