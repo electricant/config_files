@@ -1,8 +1,8 @@
 #!/bin/bash -e
 #
 
-TEMP_FILE=""
-RECIPIENT=""
+TEMP_FILE=/tmp/mailLog.tmp
+RECIPIENT="paoscr@gmail.com"
 SUBJECT="Daily log files"
 LOG_SEPARATOR="******************************"
 WELCOME_MSG="Good morning,\n\nThis is my current status."
@@ -30,6 +30,10 @@ echo "$LOG_SEPARATOR" >>$TEMP_FILE
 echo " /proc/mdstat" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
 cat /proc/mdstat >>$TEMP_FILE
+echo "" >>$TEMP_FILE
+for file in /sys/block/md*/md/mismatch_cnt; do
+	grep -H "" $file >>$TEMP_FILE
+done
 echo "" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
 # kernel log
