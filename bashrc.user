@@ -8,27 +8,9 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-HISTCONTROL=ignoreboth
-
-# save all lines of a multiple-line command in the same history entry. This
-# allows easy re-editing of multi-line commands. 
-shopt -s cmdhist
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# set history length
-HISTSIZE=1000
-HISTFILESIZE=1000
-
 # check the window size after each command and, if necessary, update the values
 # of LINES and COLUMNS.
 shopt -s checkwinsize
-
-# correct spelling mistakes on directory names during word completion if the
-# directory name initially supplied does not exist
-shopt -s dirspell
 
 # Fancy colour prompt
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
