@@ -1,14 +1,40 @@
+" general behaviour
+set nocompatible
+set encoding=utf8
+set ttyfast
+
+filetype on
+filetype indent on
+filetype plugin on
+
+set autoread
+set modeline
+
+" Keep cursor 8 lines from window borders when scrolling
+set scrolloff=8
+
 " Syntax and colors
 syntax on
 colors desert
 
 " Indentation and tab beahviour (indent using tabs instaed of spaces)
-set smartindent
 set noexpandtab
+set copyindent
+set preserveindent
 set softtabstop=0
-set shiftwidth=6
-set tabstop=6
+set shiftwidth=4
+set tabstop=4
 set ai " Auto indent
+set smarttab
+set smartindent
+
+" Search tweaks
+set ignorecase
+set smartcase
+set incsearch
+
+" Turn magic on for regex
+set magic
 
 " Linebreak settings
 set linebreak
@@ -23,8 +49,10 @@ set showmatch
 
 " remap '.' as ':' when in normal mode
 nnoremap . :
+
 " put vim in paste mode using F2
 set pastetoggle=<F2>
+
 " Quick toggle spell check
 map <F3>i :set spell! spelllang=it<CR>
 map <F3>e :set spell! spelllang=en<CR>
