@@ -11,7 +11,7 @@ set autoread
 set modeline
 
 " Keep cursor 8 lines from window borders when scrolling
-set scrolloff=8
+set scrolloff=6
 
 " Syntax and colors
 syntax on
@@ -58,10 +58,9 @@ map <F3>e :set spell! spelllang=en<CR>
 map <F4> :set spell!<CR>
 map <F5> :SyntasticToggleMode<CR>
 
-" remap '.' as ':' when in normal mode and vice versa (put here due to
-" function keys remaps not working)
+" remap '.' as ':' when in normal mode and ',' to '.' 
 nnoremap . :
-nnoremap : .
+nnoremap , .
 
 " syntastic
 let g:syntastic_check_on_open=0
