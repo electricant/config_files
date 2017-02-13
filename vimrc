@@ -15,7 +15,7 @@ set scrolloff=8
 
 " Syntax and colors
 syntax on
-colors desert
+colors pablo
 
 " Indentation and tab beahviour (indent using tabs instaed of spaces)
 set noexpandtab
@@ -24,8 +24,7 @@ set preserveindent
 set softtabstop=0
 set shiftwidth=4
 set tabstop=4
-set ai " Auto indent
-set smarttab
+set ai             " Auto indent
 set smartindent
 
 " Search tweaks
@@ -39,7 +38,7 @@ set magic
 " Linebreak settings
 set linebreak
 let &showbreak = '↳ '
-set tw=80 "gq at the beginning wraps automatically
+set textwidth=80 "gq at the beginning wraps automatically
 
 " Hilight search results
 set hlsearch
@@ -47,8 +46,9 @@ set hlsearch
 " Show matching brackets when text indicator is over them
 set showmatch
 
-" remap '.' as ':' when in normal mode
+" remap '.' as ':' when in normal mode and vice versa
 nnoremap . :
+nnoremap : .
 
 " put vim in paste mode using F2
 set pastetoggle=<F2>
@@ -57,6 +57,7 @@ set pastetoggle=<F2>
 map <F3>i :set spell! spelllang=it<CR>
 map <F3>e :set spell! spelllang=en<CR>
 map <F4> :set spell!<CR>
+map <F5> :SyntasticToggleMode<CR>
 
 " syntastic
 let g:syntastic_check_on_open=0
