@@ -12,8 +12,46 @@ esac
 # of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Fancy colour prompt
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
+# Fancy colour prompt. See:
+# http://unix.stackexchange.com/questions/266256/compact-bash-prompt-when-using$
+# and also:
+# https://github.com/jimeh/git-aware-prompt/blob/master/prompt.sh
+PRE_PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]'
+POST_PS1='\[\033[00m\]\$ '
+MAXLEN=20
+PREFIX_LEN=8
+get_PS1() {
+	local branch
+	if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
+    	if [[ "$branch" == "HEAD" ]]; then
+			branch='detached*'
+		fi
+		git_branch="($branch)"
+		
+		local status=$(git status --porcelain 2> /dev/null)
+    	if [[ "$status" != "" ]]; then
+        	git=" \[\033[0;31m$git_branch\]"
+    	else
+        	git=" \[\033[0;32m$git_branch\]"
+    	fi
+  	else
+    	git="" # no repo here
+  	fi
+
+	# limit directory length
+	limit=${1:-$MAXLEN}
+	if [[ "${#PWD}" -gt "$limit" ]]; then
+		## Take the first $PREFIX_LEN characters of the path
+		left="${PWD:0:$PREFIX_LEN}"     
+        ## Append the current directory with no path
+        PS1="$PRE_PS1${left}.../\W$git$POST_PS1"
+    else
+    	PS1="$PRE_PS1\w$git$POST_PS1"
+	fi
+}
+PROMPT_COMMAND=get_PS1
+
+#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
 
 # enable color support for some commands
 if [ -x /usr/bin/dircolors ]; then
@@ -29,6 +67,32 @@ fi
 
 # Alias and additional commands definitions.
 alias fuck='sudo $(history -p \!\!)'
+alias sudo='sudo ' # see http://unix.stackexchange.com/questions/235366/load-aliases-from-bashrc-file-while-using-sudo#235369
+
+nfsd-mount()
+{
+	sshfs -o uid=1000,gid=1000 \
+		scaramu1@login.dei.unipd.it:/nfsd/cadusers/scaramu1 /media/pol/cadusers
+	sshfs -o uid=1000,gid=1000 \
+		scaramu1@login.dei.unipd.it:/home/scaramu1 /media/pol/scaramu1
+}
+
+nfsd-umount()
+{
+	sudo umount /media/pol/cadusers
+	sudo umount /media/pol/scaramu1
+}
+
+nas-mount()
+{
+	sshfs -C -o uid=1000,gid=1000,workaround=nodelaysrv,reconnect \
+		pol@nas.ipol.gq:/mnt/data /media/pol/nas.ipol.gq
+}
+
+nas-umount()
+{
+	sudo umount /media/pol/nas.ipol.gq
+}
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
