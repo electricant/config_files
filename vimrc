@@ -2,35 +2,35 @@
 set nocompatible
 set encoding=utf8
 set ttyfast
-
+syntax on
 filetype on
 filetype indent on
 filetype plugin on
-
 set autoread
 set modeline
 
 " Keep cursor 8 lines from window borders when scrolling
 set scrolloff=6
 
-" Syntax and colors
-syntax on
-colors pablo
+" If gvim set the window size to 80x50 and colourscheme to desert
+if has("gui_running")
+	set lines=50 columns=80
+	colorscheme desert
+endif
 
-" Indentation and tab beahviour (indent using tabs instaed of spaces)
+" Indent with tabs, align with spaces
 set noexpandtab
 set copyindent
 set preserveindent
 set softtabstop=0
-set shiftwidth=4
-set tabstop=4
-set ai             " Auto indent
-set smartindent
+set shiftwidth=6
+set tabstop=6
 
 " Search tweaks
 set ignorecase
 set smartcase
 set incsearch
+set hlsearch " Hilight search results
 
 " Turn magic on for regex
 set magic
@@ -43,11 +43,16 @@ set textwidth=80 "gq at the beginning wraps automatically
 " Competion settings
 set complete=.,w,b,u,t,i,kspell
 
-" Hilight search results
-set hlsearch
-
 " Show matching brackets when text indicator is over them
 set showmatch
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
 " put vim in paste mode using F2
 set pastetoggle=<F2>
@@ -61,15 +66,6 @@ map <F5> :SyntasticToggleMode<CR>
 " remap '.' as ':' when in normal mode and ',' to '.' 
 nnoremap . :
 nnoremap , .
-
-" syntastic
-let g:syntastic_check_on_open=0
-let g:syntastic_check_on_wq=0
-let g:syntastic_warning_symbol='W>'
-let g:syntastic_c_compiler_options='-Wall -Wpedantic -Wextra'
-let g:syntastic_cpp_compiler_options='-Wall -Wpedantic -Wextra -std=c++11'
-let g:syntastic_d_compiler='gdc'
-let g:syntastic_d_compiler_options='-Wall'
 
 " Remove arrow keys in order to be forced to use hjkl
 nnoremap <Left> :echo "No left for you!"<CR>
@@ -88,8 +84,17 @@ nnoremap <Down> :echo "No down for you!"<CR>
 vnoremap <Down> :<C-u>echo "No down for you!"<CR>
 inoremap <Down> <C-o>:echo "No down you!"<CR>
 
+" Syntastic configuration
+let g:syntastic_check_on_open=0
+let g:syntastic_check_on_wq=0
+let g:syntastic_warning_symbol='W>'
+let g:syntastic_c_compiler_options='-Wall -Wpedantic -Wextra'
+let g:syntastic_cpp_compiler_options='-Wall -Wpedantic -Wextra -std=c++11'
+let g:syntastic_d_compiler='gdc'
+let g:syntastic_d_compiler_options='-Wall'
 
-
-
-
-
+" UltiSnips settings (installed from Debian repositories)
+set runtimepath+=/usr/share/vim/vim-ultisnips " where's the plugin located?
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
