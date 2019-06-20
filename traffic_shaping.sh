@@ -10,7 +10,7 @@ SPEED_UP="12Mbit"
 BURST_UP="12kb"
 LATENCY="100ms"
 # see https://linux.die.net/man/8/tc-prio
-PRIOMAP="1 1 1 1 1 1 1 1 0 0 0 0 1 1 1 1"
+PRIOMAP="1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1"
 
 # Reset interfaces just to be safe
 tc qdisc del dev eth0 root
