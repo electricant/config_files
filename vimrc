@@ -2,11 +2,9 @@
 set nocompatible
 set encoding=utf8
 set ttyfast
-
 filetype on
 filetype indent on
 filetype plugin on
-
 set autoread
 set modeline
 
@@ -17,18 +15,28 @@ set scrolloff=6
 syntax on
 colors darkblue
 
-" Indentation and tab beahviour (indent using mixed tabs and spaces)
-" see: https://vim.fandom.com/wiki/Indenting_source_code
+" Appearance settings for gVim
+if has("gui_running")
+	" increase font size
+	set guifont=Monospace\ 12
+	" Set sensible initial window size
+	set lines=50 columns=80
+	colorscheme desert
+endif
+
+" Indent with tabs, align with spaces
+set noexpandtab
+set copyindent
+set preserveindent
+set softtabstop=0
 set shiftwidth=6
 set tabstop=6
-set softtabstop=6
-set noexpandtab
-set autoindent
 
 " Search tweaks
 set ignorecase
 set smartcase
 set incsearch
+set hlsearch " Hilight search results
 
 " Turn magic on for regex
 set magic
@@ -43,11 +51,16 @@ nnoremap wp gq}
 " Competion settings
 set complete=.,w,b,u,t,i,kspell
 
-" Hilight search results
-set hlsearch
-
 " Show matching brackets when text indicator is over them
 set showmatch
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
 " put vim in paste mode using F2
 set pastetoggle=<F2>
@@ -63,7 +76,7 @@ map <F6> :w \| :make!<CR>
 nnoremap . :
 nnoremap , .
 
-" syntastic plugin
+" syntastic plugin options
 let g:syntastic_check_on_open=0
 let g:syntastic_check_on_wq=1
 let g:syntastic_always_populate_loc_list=1
@@ -101,13 +114,11 @@ vnoremap <Down> :<C-u>echo "No down for you!"<CR>
 " This clears search higliting by hitting return
 nnoremap <CR> :noh<CR><CR>
 
-" Appearance settings for gVim
-if has("gui_running")
-	" increase font size
-	set guifont=Monospace\ 12
-	" Set sensible initial window size
-	set lines=50 columns=80
-endif
+" UltiSnips settings (installed from Debian repositories)
+set runtimepath+=/usr/share/vim/vim-ultisnips " where's the plugin located?
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " Reload .vimrc automagically if something is changed
 if has ('autocmd') " Remain compatible with earlier versions
@@ -116,4 +127,3 @@ if has ('autocmd') " Remain compatible with earlier versions
     	au! BufWritePost $MYVIMRC so % | echom "Reloaded " . $MYVIMRC 
   augroup END
 endif
-
