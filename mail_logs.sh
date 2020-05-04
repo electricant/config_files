@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 #
 
 TEMP_FILE=/tmp/mailLog.tmp
@@ -26,16 +26,6 @@ echo "$LOG_SEPARATOR" >>$TEMP_FILE
 cat /var/log/auth.log.1 | grep -i 'accepted\|success*' >>$TEMP_FILE
 echo "" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
-# /proc/mdstat
-echo " /proc/mdstat" >>$TEMP_FILE
-echo "$LOG_SEPARATOR" >>$TEMP_FILE
-cat /proc/mdstat >>$TEMP_FILE
-echo "" >>$TEMP_FILE
-for file in /sys/block/md*/md/mismatch_cnt; do
-	grep -H "" $file >>$TEMP_FILE
-done
-echo "" >>$TEMP_FILE
-echo "$LOG_SEPARATOR" >>$TEMP_FILE
 # kernel log
 echo " dmesg (important only)" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
@@ -48,10 +38,12 @@ echo "$LOG_SEPARATOR" >>$TEMP_FILE
 free -h >>$TEMP_FILE
 echo "" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
-# disk space
-echo " Free disk space" >>$TEMP_FILE
+# disk info
+echo " RAID status" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
-df -h >>$TEMP_FILE
+btrfs filesystem usage /mnt/data >>$TEMP_FILE
+echo "" >>$TEMP_FILE
+btrfs scrub status /mnt/data >>$TEMP_FILE
 echo "" >>$TEMP_FILE
 echo "$LOG_SEPARATOR" >>$TEMP_FILE
 # possible updates
