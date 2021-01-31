@@ -8,6 +8,17 @@ case $- in
       *) return;;
 esac
 
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
 # check the window size after each command and, if necessary, update the values
 # of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -69,26 +80,13 @@ fi
 # Control history management
 export HISTCONTROL=ignoreboth:erasedups
 
-# Set vim mode
+# VI mode in bash and show current mode in prompt
 set -o vi
+bind 'set show-mode-in-prompt on'
 
 # Alias and additional commands definitions.
 alias fuck='sudo $(history -p \!\!)'
 alias sudo='sudo ' # see http://unix.stackexchange.com/questions/235366/load-aliases-from-bashrc-file-while-using-sudo#235369
-
-nfsd-mount()
-{
-	sshfs -o uid=1000,gid=1000 \
-		scaramu1@login.dei.unipd.it:/nfsd/ichome/scaramu1 /media/pol/ichome
-	sshfs -o uid=1000,gid=1000 \
-		scaramu1@login.dei.unipd.it:/home/scaramu1 /media/pol/scaramu1
-}
-
-nfsd-umount()
-{
-	sudo umount /media/pol/ichome
-	sudo umount /media/pol/scaramu1
-}
 
 nas-mount()
 {
@@ -100,19 +98,4 @@ nas-umount()
 {
 	sudo umount /media/pol/nas.ipol.gq
 }
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-# Restore ccache settings
-export CCACHE_TEMPDIR="/tmp"
-export CCACHE_DIR="/var/cache/ccache"
 
